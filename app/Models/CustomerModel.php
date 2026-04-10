@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Models;
+
+use CodeIgniter\Model;
+
+class CustomerModel extends Model
+{
+    protected $table         = 'customers';
+    protected $primaryKey    = 'id';
+    protected $returnType    = 'array';
+    protected $allowedFields = ['name', 'phone', 'email', 'address'];
+    protected $useTimestamps = true;
+    protected $createdField  = 'created_at';
+    protected $updatedField  = false; // customers table has no updated_at
+
+    protected $validationRules = [
+        'name' => 'required|min_length[2]|max_length[150]',
+    ];
+}
