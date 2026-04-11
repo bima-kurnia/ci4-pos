@@ -169,6 +169,7 @@
 
         <!-- Cart items list -->
         <div class="flex-1 overflow-y-auto px-3 py-2" id="cartList">
+            <!-- Empty state: always in DOM, toggled with display -->
             <div class="text-center py-12 text-slate-300" id="emptyCart">
                 <svg class="w-14 h-14 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -177,6 +178,8 @@
                 <p class="text-sm font-medium">Cart is empty</p>
                 <p class="text-xs">Tap a product to add it</p>
             </div>
+            <!-- Cart rows injected here — separate from emptyCart -->
+            <div id="cartItems"></div>
         </div>
 
         <!-- Discount selector -->
@@ -466,15 +469,14 @@ function clearCart() {
 }
 
 function renderCart() {
-    const list   = document.getElementById('cartList');
-    const empty  = document.getElementById('emptyCart');
-    const keys   = Object.keys(cart);
+    const cartItems = document.getElementById('cartItems');
+    const empty     = document.getElementById('emptyCart');
+    const keys      = Object.keys(cart);
 
     document.getElementById('cartCount').textContent = keys.reduce((s, k) => s + cart[k].qty, 0);
 
     if (keys.length === 0) {
-        list.innerHTML = '';
-        list.appendChild(empty);
+        cartItems.innerHTML = '';
         empty.style.display = '';
         document.getElementById('checkoutBtn').disabled = true;
         recalculate();
@@ -520,7 +522,7 @@ function renderCart() {
         </div>`;
     });
 
-    list.innerHTML = html;
+    cartItems.innerHTML = html;
     document.getElementById('checkoutBtn').disabled = false;
     recalculate();
 }

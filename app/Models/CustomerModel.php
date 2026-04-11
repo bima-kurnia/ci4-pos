@@ -11,7 +11,7 @@ class CustomerModel extends Model
     protected $returnType    = 'array';
     protected $allowedFields = ['name', 'phone', 'email', 'address', 'created_at'];
 
-    // Timestamps handled manually - table no has no updated_at
+    // Timestamps handled manually - table has no updated_at
     protected $useTimestamps = false;
 
     protected $validationRules = [

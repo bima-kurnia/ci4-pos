@@ -83,7 +83,7 @@
                         <p class="text-slate-400"><?= date('H:i:s', strtotime($tx['created_at'])) ?></p>
                     </td>
                     <td class="text-sm"><?= esc($tx['cashier_name']) ?></td>
-                    <td class="text-sm"><?= esc($tx['customer_name'] ?? '<span class="text-slate-400">Walk-in</span>') ?></td>
+                    <td class="text-sm"> <?= $tx['customer_name'] ? esc($tx['customer_name']) : '<span class="text-slate-400">Walk-in</span>' ?></td>
                     <td class="text-sm">Rp <?= number_format($tx['total_amount'], 0, ',', '.') ?></td>
                     <td class="text-sm text-red-500">
                         <?= $tx['discount'] > 0 ? '- Rp ' . number_format($tx['discount'], 0, ',', '.') : '—' ?>
