@@ -49,10 +49,11 @@ class CustomerController extends Controller
         }
 
         $this->customerModel->insert([
-            'name'    => $this->request->getPost('name'),
-            'phone'   => $this->request->getPost('phone') ?: null,
-            'email'   => $this->request->getPost('email') ?: null,
-            'address' => $this->request->getPost('address') ?: null,
+            'name'       => $this->request->getPost('name'),
+            'phone'      => $this->request->getPost('phone') ?: null,
+            'email'      => $this->request->getPost('email') ?: null,
+            'address'    => $this->request->getPost('address') ?: null,
+            'created_at' => date('Y-m-d H:i:s'),
         ]);
 
         return redirect()->to('/customers')->with('success', 'Customer added successfully.');
@@ -77,10 +78,11 @@ class CustomerController extends Controller
         }
 
         $this->customerModel->update($id, [
-            'name'    => $this->request->getPost('name'),
-            'phone'   => $this->request->getPost('phone') ?: null,
-            'email'   => $this->request->getPost('email') ?: null,
-            'address' => $this->request->getPost('address') ?: null,
+            'name'       => $this->request->getPost('name'),
+            'phone'      => $this->request->getPost('phone') ?: null,
+            'email'      => $this->request->getPost('email') ?: null,
+            'address'    => $this->request->getPost('address') ?: null,
+            'created_at' => date('Y-m-d H:i:s'),
         ]);
 
         return redirect()->to('/customers')->with('success', 'Customer updated successfully.');

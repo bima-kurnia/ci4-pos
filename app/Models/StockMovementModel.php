@@ -10,9 +10,9 @@ class StockMovementModel extends Model
     protected $primaryKey    = 'id';
     protected $returnType    = 'array';
     protected $allowedFields = ['product_id', 'type', 'quantity', 'reference'];
-    protected $useTimestamps = true;
-    protected $createdField  = 'created_at';
-    protected $updatedField  = false;
+    
+    // Timestamps handled manually - table no has no updated_at
+    protected $useTimestamps = false;
 
     public function record(int $productId, string $type, int $qty, string $reference = ''): void
     {
