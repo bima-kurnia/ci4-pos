@@ -1,69 +1,287 @@
-# CodeIgniter 4 Application Starter
+# 🏪 SwiftPOS — CodeIgniter 4 Point of Sale System
 
-## What is CodeIgniter?
+A full-featured, production-ready POS web application built with **CodeIgniter 4**, **MySQL**, **Tailwind CSS**, and **DaisyUI**.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+---
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+## 📦 Tech Stack
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+| Layer     | Technology                   |
+|-----------|------------------------------|
+| Backend   | CodeIgniter 4 (MVC)          |
+| Database  | MySQL 8.x                    |
+| Frontend  | Tailwind CSS + DaisyUI 4.x   |
+| Auth      | Session-based, role-protected |
+| Fonts     | Plus Jakarta Sans, JetBrains Mono |
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+---
 
-## Installation & updates
+## 🗄️ Database Schema (9 Tables)
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+```
+users              — System users (admin / cashier)
+categories         — Product categories
+products           — Product catalog with stock tracking
+customers          — Customer registry
+transactions       — Sale transaction headers
+transaction_items  — Line items per transaction
+payments           — Payment records (cash/card/transfer/ewallet)
+stock_movements    — Full stock in/out audit trail
+discounts          — Reusable discount definitions
+```
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+---
 
-## Setup
+## ⚙️ Setup Instructions
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+### 1. Install CodeIgniter 4
 
-## Important Change with index.php
+```bash
+composer create-project codeigniter4/appstarter ci4-pos
+cd ci4-pos
+```
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+### 2. Copy All Generated Files
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+Copy the entire `app/` directory contents from this project into your CI4 installation.
 
-**Please** read the user guide for a better explanation of how CI4 works!
+### 3. Configure Environment
 
-## Repository Management
+```bash
+cp .env.example .env
+```
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+Edit `.env`:
+```ini
+CI_ENVIRONMENT = development
+app.baseURL    = 'http://localhost:8080/'
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+database.default.hostname = 127.0.0.1
+database.default.database = pos_db
+database.default.username = root
+database.default.password = your_password
+database.default.DBDriver = MySQLi
+```
 
-## Server Requirements
+### 4. Create MySQL Database
 
-PHP version 8.2 or higher is required, with the following extensions installed:
+```sql
+CREATE DATABASE pos_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+### 5. Run Migrations
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - The end of life date for PHP 8.1 was December 31, 2025.
-> - If you are still using below PHP 8.2, you should upgrade immediately.
-> - The end of life date for PHP 8.2 will be December 31, 2026.
+```bash
+php spark migrate
+```
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+This will create all 9 tables in the correct order with proper foreign keys.
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+### 6. Seed Dummy Data
+
+```bash
+php spark db:seed MainSeeder
+```
+
+Seeds:
+- 2 users (admin + cashier)
+- 5 categories
+- 12 products
+- 5 customers
+- 7 discount types
+
+### 7. Start Development Server
+
+```bash
+php spark serve
+```
+
+Visit: **http://localhost:8080**
+
+---
+
+## 🔑 Default Login Credentials
+
+| Role    | Email              | Password     |
+|---------|--------------------|--------------|
+| Admin   | admin@pos.com      | admin123     |
+| Cashier | cashier@pos.com    | cashier123   |
+
+---
+
+## 🗂️ File Structure
+
+```
+app/
+├── Config/
+│   ├── Database.php
+│   ├── Filters.php          ← registers auth + admin filters
+│   └── Routes.php           ← all application routes
+│
+├── Controllers/
+│   ├── AuthController.php       login/logout
+│   ├── DashboardController.php  home stats
+│   ├── PosController.php        ★ checkout + DB transaction
+│   ├── ProductController.php    CRUD + stock log
+│   ├── CategoryController.php   CRUD
+│   ├── CustomerController.php   CRUD + AJAX search
+│   ├── TransactionController.php list + detail + cancel
+│   └── UserController.php       admin user management
+│
+├── Filters/
+│   ├── AuthFilter.php       redirect if not logged in
+│   └── AdminFilter.php      redirect if not admin
+│
+├── Models/
+│   ├── UserModel.php
+│   ├── CategoryModel.php
+│   ├── ProductModel.php         stock management helpers
+│   ├── CustomerModel.php
+│   ├── TransactionModel.php     invoice generator, filters
+│   ├── TransactionItemModel.php
+│   ├── PaymentModel.php
+│   ├── StockMovementModel.php   record() helper
+│   └── DiscountModel.php        calculate() helper
+│
+├── Database/
+│   ├── Migrations/
+│   │   ├── ..._CreateUsersTable.php
+│   │   ├── ..._CreateCategoriesTable.php
+│   │   ├── ..._CreateProductsTable.php
+│   │   ├── ..._CreateCustomersTable.php
+│   │   ├── ..._CreateTransactionsTable.php
+│   │   ├── ..._CreateTransactionItemsTable.php
+│   │   ├── ..._CreatePaymentsTable.php
+│   │   ├── ..._CreateStockMovementsTable.php
+│   │   └── ..._CreateDiscountsTable.php
+│   └── Seeds/
+│       └── MainSeeder.php
+│
+└── Views/
+    ├── layouts/
+    │   └── main.php             sidebar layout
+    ├── auth/
+    │   └── login.php
+    ├── dashboard/
+    │   └── index.php
+    ├── pos/
+    │   └── index.php            ★ full POS interface
+    ├── products/
+    │   ├── index.php
+    │   ├── form.php             create + edit
+    │   └── stock_log.php
+    ├── categories/
+    │   └── index.php
+    ├── customers/
+    │   └── index.php
+    ├── transactions/
+    │   ├── index.php
+    │   └── show.php             receipt view
+    └── users/
+        └── index.php
+```
+
+---
+
+## 💳 Checkout Flow (Database Transaction)
+
+```
+POST /pos/checkout  (JSON payload from POS frontend)
+│
+├── 1. Validate cart is not empty
+├── 2. For each cart item:
+│   ├── Fetch product row from DB
+│   └── Check stock >= requested qty  ← throws if insufficient
+│
+├── 3. Calculate:
+│   ├── total_amount (sum of line items)
+│   ├── discount_amount (via DiscountModel::calculate)
+│   ├── tax_amount (11% of after-discount)
+│   └── grand_total
+│
+├── 4. Validate: amount_paid >= grand_total
+├── 5. Generate unique invoice number (INV-YYYYMMDD-XXXXX)
+│
+├── DB::transBegin()
+│   ├── INSERT transactions
+│   ├── For each item:
+│   │   ├── INSERT transaction_items
+│   │   ├── UPDATE products SET stock = stock - qty  ← prevents negative
+│   │   └── INSERT stock_movements (type=out, reference=invoice)
+│   └── INSERT payments
+│
+├── DB::transCommit()   ← all or nothing
+│   └── return JSON { success, invoice_number, change_amount, redirect }
+│
+└── On Exception:
+    ├── DB::transRollback()
+    └── return JSON { success: false, message: error }
+```
+
+---
+
+## 🔐 Role-Based Access Control
+
+| Feature              | Admin | Cashier |
+|----------------------|-------|---------|
+| POS Checkout         | ✅    | ✅      |
+| View Transactions    | ✅    | ✅      |
+| Cancel Transaction   | ✅    | ❌      |
+| Product CRUD         | ✅    | View only |
+| Category CRUD        | ✅    | ❌      |
+| Customer CRUD        | ✅    | View only |
+| User Management      | ✅    | ❌      |
+| Stock Log            | ✅    | ✅      |
+
+---
+
+## 🚀 Key Features
+
+- ✅ Full DB transaction on checkout (atomic, rollback on error)
+- ✅ Prevents negative stock with guard checks
+- ✅ Auto-generated invoice numbers (INV-YYYYMMDD-XXXXX)
+- ✅ Real-time cart with quantity controls
+- ✅ Tax (11%) + flexible discounts (% or flat)
+- ✅ Quick-amount payment buttons
+- ✅ Role-based access (admin vs cashier)
+- ✅ Stock movement audit trail
+- ✅ Print-ready transaction receipts
+- ✅ Date/status filtering for transactions
+- ✅ Low-stock dashboard alerts
+- ✅ DaisyUI modals for all CRUD operations
+- ✅ AJAX product search on POS screen
+- ✅ Responsive layout (sidebar + top nav)
+
+---
+
+## 🛠️ Spark Commands Reference
+
+```bash
+# Run all migrations
+php spark migrate
+
+# Rollback migrations
+php spark migrate:rollback
+
+# Seed dummy data
+php spark db:seed MainSeeder
+
+# Create new migration
+php spark make:migration CreateXxxTable
+
+# Start dev server
+php spark serve
+
+# Start on custom port
+php spark serve --port=8888
+```
+
+---
+
+## 📝 Notes
+
+- CSRF protection is configured via `.env` — enabled in production
+- All monetary values stored as `DECIMAL(15,2)` for accuracy
+- Stock movements record every change (initial, sale, manual adjustment)
+- Invoice numbers reset daily by prefix (INV-YYYYMMDD-)
+- Session expires after 2 hours (configurable in `.env`)
