@@ -220,6 +220,36 @@ POST /pos/checkout  (JSON payload from POS frontend)
 
 ---
 
+## 🧭 User Flows
+
+### Admin Flow (First Time Setup)
+
+1. **Login** as admin
+2. **Categories** → Add categories first (e.g. Beverages, Snacks)
+3. **Products** → Add products, assign category, set price & stock
+4. **Customers** → Add customers (optional, can use Walk-in)
+5. **Users** → Add cashier accounts
+6. **POS** → Do a test transaction
+7. **Transactions** → Verify the transaction was recorded correctly
+
+### Cashier Flow (Daily Use)
+
+1. **Login** as cashier
+2. **POS** → Start selling
+   - Search / browse products
+   - Click to add to cart
+   - Adjust quantities
+   - Select customer (or leave as Walk-in)
+   - Select discount (if any)
+   - Click **Process Payment**
+   - Enter amount paid → confirm
+   - Show success modal → start new sale
+3. **Transactions** → Check own transaction history if needed
+4. **Customers** → Look up a customer if needed
+5. **Logout** at end of shift
+
+---
+
 ## 🔐 Role-Based Access Control
 
 | Feature              | Admin | Cashier |
