@@ -196,31 +196,42 @@
         </header>
 
         <!-- Flash messages -->
-        <div class="px-6 pt-4">
+        <div class="px-6 pt-4 space-y-2">
             <?php if (session()->getFlashdata('success')): ?>
-            <div class="alert alert-success shadow-sm mb-0">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span><?= esc(session()->getFlashdata('success')) ?></span>
-            </div>
+                <div class="alert alert-success shadow-sm mb-0 flex justify-between items-center text-white">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span><?= esc(session()->getFlashdata('success')) ?></span>
+                    </div>
+                    <button type="button" onclick="this.parentElement.remove();">&times;</button>
+                </div>
             <?php endif; ?>
+
             <?php if (session()->getFlashdata('error')): ?>
-            <div class="alert alert-error shadow-sm mb-0">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span><?= esc(session()->getFlashdata('error')) ?></span>
-            </div>
+                <div class="alert alert-error shadow-sm mb-0 flex justify-between items-center text-white">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span><?= esc(session()->getFlashdata('error')) ?></span>
+                    </div>
+                    <button type="button" onclick="this.parentElement.remove();">&times;</button>
+                </div>
             <?php endif; ?>
+
             <?php if (session()->getFlashdata('errors')): ?>
-            <div class="alert alert-error shadow-sm mb-0">
-                <ul class="list-disc list-inside text-sm">
-                    <?php foreach ((array) session()->getFlashdata('errors') as $err): ?>
-                        <li><?= esc($err) ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
+                <div class="alert alert-error shadow-sm mb-0 flex justify-between items-start text-white">
+                    <div class="flex items-start">
+                        <ul class="list-disc list-inside text-sm">
+                            <?php foreach ((array) session()->getFlashdata('errors') as $err): ?>
+                                <li><?= esc($err) ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                    <button type="button" onclick="this.parentElement.remove();">&times;</button>
+                </div>
             <?php endif; ?>
         </div>
 
