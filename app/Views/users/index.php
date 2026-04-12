@@ -53,7 +53,7 @@
                 <td class="text-xs text-slate-400"><?= date('d M Y', strtotime($u['created_at'])) ?></td>
                 <td>
                     <div class="flex items-center justify-center gap-1">
-                        <button onclick="openEdit(<?= htmlspecialchars(json_encode($u), ENT_QUOTES) ?>)"
+                        <button onclick="openEdit(<?= htmlspecialchars(json_encode($u), ENT_QUOTES) ?>, <?= (int)session()->get('user_id') ?>)"
                                 class="btn btn-ghost btn-xs text-sky-600">Edit</button>
                         <?php if ($u['id'] != session()->get('user_id')): ?>
                         <button onclick="openDelete(<?= $u['id'] ?>, '<?= esc(addslashes($u['name'])) ?>')"
@@ -122,12 +122,20 @@
                     <label class="label"><span class="label-text font-semibold">Password</span></label>
                     <input type="password" name="password" class="input input-bordered" placeholder="Leave blank to keep current" />
                 </div>
-                <div class="form-control">
+                <div class="form-control" id="editRoleField">
                     <label class="label"><span class="label-text font-semibold">Role <span class="text-red-500">*</span></span></label>
                     <select id="editRole" name="role" class="select select-bordered">
                         <option value="cashier">Cashier</option>
                         <option value="admin">Admin</option>
                     </select>
+                </div>
+                <!-- Shown only when editing own account -->
+                <div class="form-control hidden" id="editRoleLocked">
+                    <label class="label"><span class="label-text font-semibold">Role</span></label>
+                    <div class="flex items-center gap-2 px-4 py-2 bg-slate-100 rounded-xl">
+                        <span id="editRoleDisplay" class="font-semibold capitalize text-slate-600"></span>
+                        <span class="badge badge-warning badge-sm ml-auto">🔒 Cannot change own role</span>
+                    </div>
                 </div>
             </div>
             <div class="modal-action">
@@ -159,11 +167,29 @@
 <?= $this->section('scripts') ?>
 <script>
 const baseUrl = '<?= base_url() ?>';
-function openEdit(u) {
+function openEdit(u, currentId) {
     document.getElementById('editForm').action = baseUrl + '/users/update/' + u.id;
     document.getElementById('editName').value  = u.name;
     document.getElementById('editEmail').value = u.email;
-    document.getElementById('editRole').value  = u.role;
+
+    const isSelf      = (+u.id === currentId);
+    const roleField   = document.getElementById('editRoleField');
+    const roleLocked  = document.getElementById('editRoleLocked');
+    const roleDisplay = document.getElementById('editRoleDisplay');
+    const roleSelect  = document.getElementById('editRole');
+
+    if (isSelf) {
+        // Hide the select, show the locked badge
+        roleField.classList.add('hidden');
+        roleLocked.classList.remove('hidden');
+        roleDisplay.textContent = u.role;
+        roleSelect.value = u.role; // still submitted but ignored server-side
+    } else {
+        roleField.classList.remove('hidden');
+        roleLocked.classList.add('hidden');
+        roleSelect.value = u.role;
+    }
+
     editModal.showModal();
 }
 function openDelete(id, name) {

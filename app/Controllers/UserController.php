@@ -19,8 +19,9 @@ class UserController extends Controller
     public function index()
     {
         return view('users/index', [
-            'title' => 'Users',
-            'users' => $this->userModel->orderBy('name')->findAll(),
+            'title'      => 'Users',
+            'users'      => $this->userModel->orderBy('name')->findAll(),
+            'current_id' => (int) session()->get('user_id'),
         ]);
     }
 
@@ -50,38 +51,47 @@ class UserController extends Controller
     public function update(int $id)
     {
         $user = $this->userModel->find($id);
-
         if (!$user) {
             return redirect()->to('/users')->with('error', 'User not found.');
         }
-
+ 
+        $isSelf    = ($id === (int) session()->get('user_id'));
         $emailRule = "required|valid_email|is_unique[users.email,id,{$id}]";
-
+ 
         $rules = [
             'name'  => 'required|min_length[2]|max_length[100]',
             'email' => $emailRule,
-            'role'  => 'required|in_list[admin,cashier]',
         ];
-
+ 
+        // Only validate role if editing someone else
+        if (!$isSelf) {
+            $rules['role'] = 'required|in_list[admin,cashier]';
+        }
+ 
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
-
+ 
         $data = [
             'name'  => $this->request->getPost('name'),
             'email' => $this->request->getPost('email'),
-            'role'  => $this->request->getPost('role'),
+            
+            // Keep existing role if editing own account
+            'role'  => $isSelf ? $user['role'] : $this->request->getPost('role'),
         ];
-
+ 
         $newPass = $this->request->getPost('password');
-
         if ($newPass) {
             $data['password'] = $this->userModel->hashPassword($newPass);
         }
-
+ 
         $this->userModel->update($id, $data);
-
-        return redirect()->to('/users')->with('success', 'User updated successfully.');
+ 
+        $msg = $isSelf
+            ? 'Your profile updated. Role cannot be changed for your own account.'
+            : 'User updated successfully.';
+ 
+        return redirect()->to('/users')->with('success', $msg);
     }
 
     public function delete(int $id)
