@@ -72,5 +72,12 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 
         // Transactions
         $routes->post('transactions/cancel/(:num)', 'TransactionController::cancel/$1');
+
+        // ── Analytics (Admin only) ──────────────────────────────────────
+        $routes->get('analytics',                    'AnalyticsController::index');
+        $routes->get('analytics/sales-forecast',     'AnalyticsController::salesForecast');
+        $routes->get('analytics/product-forecast',   'AnalyticsController::productForecast');
+        $routes->get('analytics/customer-insights',  'AnalyticsController::customerInsights');
+        $routes->get('analytics/clear-cache',        'AnalyticsController::clearCache');
     });
 });

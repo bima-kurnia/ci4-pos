@@ -32,17 +32,86 @@
         };
     </script>
     <style>
-        * { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .sidebar-link { @apply flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-150; }
-        .sidebar-link:hover { @apply bg-white/10 text-white; }
-        .sidebar-link.active { @apply bg-white text-sky-700 shadow font-semibold; }
-        .sidebar-link .icon { @apply w-5 h-5 flex-shrink-0; }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-        .stat-card { @apply bg-white rounded-2xl p-5 shadow-sm border border-slate-100; }
-        .badge-role-admin   { @apply badge badge-error badge-sm font-semibold; }
-        .badge-role-cashier { @apply badge badge-info badge-sm font-semibold; }
+        * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem; /* gap-3 */
+            padding-left: 1rem;  /* px-4 */
+            padding-right: 1rem;
+            padding-top: 0.2rem; /* py-2.5 */
+            padding-bottom: 0.2rem;
+            border-radius: 0.75rem; /* rounded-xl */
+            font-size: 1rem; /* text-sm */
+            font-weight: 500; /* font-medium */
+            transition: all 150ms ease-in-out; /* transition-all duration-150 */
+        }
+
+        .sidebar-link:hover {
+            background-color: rgba(255, 255, 255, 0.1); /* bg-white/10 */
+            color: #ffffff;
+        }
+
+        .sidebar-link.active {
+            background-color: #ffffff; /* bg-white */
+            color: #0369a1; /* text-sky-700 */
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); /* shadow */
+            font-weight: 600; /* font-semibold */
+        }
+
+        .sidebar-link .icon {
+            width: 1.25rem; /* w-5 */
+            height: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        /* Card */
+        .stat-card {
+            background-color: #ffffff;
+            border-radius: 1rem; /* rounded-2xl */
+            padding: 1.25rem; /* p-5 */
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); /* shadow-sm */
+            border: 1px solid #f1f5f9; /* border-slate-100 */
+        }
+
+        /* Badges (assuming DaisyUI-like styles) */
+        .badge-role-admin {
+            display: inline-block;
+            font-size: 0.75rem; /* badge-sm */
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            background-color: #ef4444; /* error */
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .badge-role-cashier {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            background-color: #3b82f6; /* info */
+            color: #ffffff;
+            font-weight: 600;
+        }
     </style>
     <?= $this->renderSection('head') ?>
 </head>
@@ -76,7 +145,7 @@
 
             <a href="<?= base_url('dashboard') ?>"
                class="sidebar-link flex items-center gap-x-2 <?= uri_string() === 'dashboard' ? 'active' : 'text-sky-100' ?>">
-                <svg class="icon w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="icon w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                 </svg>
@@ -85,7 +154,7 @@
 
             <a href="<?= base_url('pos') ?>"
                class="sidebar-link flex items-center gap-x-2 <?= str_starts_with(uri_string(), 'pos') ? 'active' : 'text-sky-100' ?>">
-                <svg class="icon w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="icon w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                 </svg>
@@ -98,7 +167,7 @@
 
             <a href="<?= base_url('categories') ?>"
                class="sidebar-link flex items-center gap-x-2 <?= str_starts_with(uri_string(), 'categories') ? 'active' : 'text-sky-100' ?>">
-                <svg class="icon w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="icon w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                 </svg>
@@ -109,7 +178,7 @@
 
             <a href="<?= base_url('products') ?>"
                class="sidebar-link flex items-center gap-x-2 <?= str_starts_with(uri_string(), 'products') ? 'active' : 'text-sky-100' ?>">
-                <svg class="icon w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="icon w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                 </svg>
@@ -118,7 +187,7 @@
 
             <a href="<?= base_url('customers') ?>"
                class="sidebar-link flex items-center gap-x-2 <?= str_starts_with(uri_string(), 'customers') ? 'active' : 'text-sky-100' ?>">
-                <svg class="icon w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="icon w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
@@ -127,7 +196,7 @@
 
             <a href="<?= base_url('transactions') ?>"
                class="sidebar-link flex items-center gap-x-2 <?= str_starts_with(uri_string(), 'transactions') ? 'active' : 'text-sky-100' ?>">
-                <svg class="icon w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="icon w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                 </svg>
@@ -140,11 +209,23 @@
 
             <a href="<?= base_url('users') ?>"
                class="sidebar-link flex items-center gap-x-2 <?= str_starts_with(uri_string(), 'users') ? 'active' : 'text-sky-100' ?>">
-                <svg class="icon w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="icon w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
                 Users
+            </a>
+
+            <a href="<?= base_url('analytics') ?>"
+               class="sidebar-link flex items-center gap-x-2 <?= str_starts_with(uri_string(), 'analytics') ? 'active' : 'text-sky-100' ?>">
+                <svg class="icon w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+                AI Analytics
+                <span class="ml-auto text-md px-2 py-0.5 rounded bg-sky-500 text-white font-semibold">
+                    AI
+                </span>
             </a>
 
             <?php endif; ?>
