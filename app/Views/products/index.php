@@ -38,6 +38,7 @@
             <thead class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wide">
                 <tr>
                     <th>#</th>
+                    <th>Image</th>
                     <th>Product</th>
                     <th>SKU</th>
                     <th>Category</th>
@@ -53,17 +54,32 @@
                 <?php foreach ($products as $i => $p): ?>
                 <tr class="hover">
                     <td class="text-slate-400 text-xs"><?= $i + 1 ?></td>
+                    <td>
+                        <?php if (!empty($p['image'])): ?>
+                        <img src="<?= esc($p['image']) ?>"
+                             alt="<?= esc($p['name']) ?>"
+                             class="w-12 h-12 rounded-xl object-cover border border-slate-100"
+                             loading="lazy"
+                             onerror="this.src=''" />
+                        <?php else: ?>
+                        <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                            </svg>
+                        </div>
+                        <?php endif; ?>
+                    </td>
                     <td class="font-semibold text-slate-800"><?= esc($p['name']) ?></td>
                     <td><span class="badge badge-ghost font-mono text-xs"><?= esc($p['sku']) ?></span></td>
                     <td class="text-xs text-slate-500"><?= esc($p['category_name'] ?? '—') ?></td>
                     <td class="font-semibold">Rp <?= number_format($p['price'], 0, ',', '.') ?></td>
                     <td>
                         <?php if ($p['stock'] == 0): ?>
-                            <span class="badge badge-error badge-sm font-bold">Out of stock</span>
+                            <span class="badge badge-error badge-sm font-bold text-white">Out of stock</span>
                         <?php elseif ($p['stock'] <= 10): ?>
-                            <span class="badge badge-warning badge-sm font-bold"><?= $p['stock'] ?> (Low)</span>
+                            <span class="badge badge-warning badge-sm font-bold text-white"><?= $p['stock'] ?> (Low)</span>
                         <?php else: ?>
-                            <span class="badge badge-success badge-sm"><?= $p['stock'] ?></span>
+                            <span class="badge badge-success badge-sm text-white"><?= $p['stock'] ?></span>
                         <?php endif; ?>
                     </td>
                     <td>

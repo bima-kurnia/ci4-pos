@@ -114,14 +114,30 @@
                      data-sku="<?= esc($p['sku']) ?>"
                      data-category="<?= esc($p['category_name'] ?? '') ?>"
                      onclick="addToCart(this)">
-                    <!-- Product icon -->
-                    <div class="w-full aspect-square rounded-xl bg-gradient-to-br from-sky-50 to-indigo-50 flex items-center justify-center mb-2 relative">
-                        <svg class="w-9 h-9 text-sky-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                        </svg>
+                    <!-- Product image -->
+                    <div class="w-full aspect-square rounded-xl overflow-hidden mb-2 relative bg-slate-100">
+                        <?php if (!empty($p['image'])): ?>
+                        <img src="<?= esc($p['image']) ?>"
+                             alt="<?= esc($p['name']) ?>"
+                             class="w-full h-full object-cover"
+                             loading="lazy"
+                             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+                        <div class="w-full h-full items-center justify-center bg-gradient-to-br from-sky-50 to-indigo-50 absolute inset-0 hidden">
+                            <svg class="w-9 h-9 text-sky-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                            </svg>
+                        </div>
+                        <?php else: ?>
+                        <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-sky-50 to-indigo-50">
+                            <svg class="w-9 h-9 text-sky-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                            </svg>
+                        </div>
+                        <?php endif; ?>
                         <?php if ($p['stock'] <= 0): ?>
-                        <div class="absolute inset-0 bg-white/70 rounded-xl flex items-center justify-center">
+                        <div class="absolute inset-0 bg-white/70 flex items-center justify-center">
                             <span class="text-xs font-bold text-red-500">OUT</span>
                         </div>
                         <?php elseif ($p['stock'] <= 10): ?>

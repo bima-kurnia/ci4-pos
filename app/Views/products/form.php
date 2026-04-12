@@ -78,6 +78,26 @@
 
             </div>
 
+            <!-- Image URL -->
+            <div class="form-control mt-4">
+                <label class="label"><span class="label-text font-semibold">Image URL</span></label>
+                <input type="url" name="image"
+                       value="<?= old('image', $product['image'] ?? '') ?>"
+                       placeholder="https://example.com/image.jpg"
+                       class="input input-bordered w-full" />
+                <label class="label">
+                    <span class="label-text-alt text-slate-400">Optional. Paste any direct image URL.</span>
+                </label>
+                <?php if (!empty($product['image'])): ?>
+                <div class="mt-2 flex items-center gap-3">
+                    <img src="<?= esc($product['image']) ?>" alt="Preview"
+                         class="w-20 h-20 rounded-xl object-cover border border-slate-200"
+                         onerror="this.style.display='none'" />
+                    <span class="text-xs text-slate-400">Current image</span>
+                </div>
+                <?php endif; ?>
+            </div>
+
             <div class="flex gap-3 mt-6 pt-4 border-t border-slate-100">
                 <button type="submit" class="btn btn-primary">
                     <?= $product ? 'Update Product' : 'Create Product' ?>
